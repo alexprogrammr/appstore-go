@@ -1,5 +1,7 @@
 # appstore-go
 
+[![CI](https://github.com/alexprogrammr/appstore-go/actions/workflows/ci.yml/badge.svg)](https://github.com/alexprogrammr/appstore-go/actions/workflows/ci.yml)
+
 Unofficial App Store Connect API client for Go.
 
 Please note, it may not be fully functional or up-to-date. If you have any issues, please open an issue or submit a pull request.
