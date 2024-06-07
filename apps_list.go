@@ -7,17 +7,8 @@ import (
 	"net/http"
 )
 
-// https://developer.apple.com/documentation/appstoreconnectapi/appsresponse
-type ListAppsResponse struct {
-	Data  []App       `json:"data"`
-	Links PagingLinks `json:"links"`
-	Meta  struct {
-		Paging Paging `json:"paging"`
-	} `json:"meta"`
-}
-
 // https://developer.apple.com/documentation/appstoreconnectapi/list_apps
-func (c *Client) ListApps(ctx context.Context) (*ListAppsResponse, error) {
+func (c *Client) ListApps(ctx context.Context) ([]App, error) {
 	url := "https://api.appstoreconnect.apple.com/v1/apps"
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
@@ -41,10 +32,10 @@ func (c *Client) ListApps(ctx context.Context) (*ListAppsResponse, error) {
 		return nil, fmt.Errorf("unexpected status code %s: %d", url, resp.StatusCode)
 	}
 
-	rp := ListAppsResponse{}
+	rp := listResponse[App]{}
 	if err := json.NewDecoder(resp.Body).Decode(&rp); err != nil {
 		return nil, fmt.Errorf("failed to decode response %s: %w", url, err)
 	}
 
-	return &rp, nil
+	return rp.Data, nil
 }

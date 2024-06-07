@@ -7,13 +7,8 @@ import (
 	"net/http"
 )
 
-// https://developer.apple.com/documentation/appstoreconnectapi/gamecenterdetailresponse
-type GetGameCenterResponse struct {
-	GameCenter GameCenter `json:"data"`
-}
-
 // https://developer.apple.com/documentation/appstoreconnectapi/read_the_state_of_game_center_for_an_app
-func (c *Client) GetGameCenter(ctx context.Context, appID string) (*GetGameCenterResponse, error) {
+func (c *Client) GetGameCenter(ctx context.Context, appID AppID) (*GameCenter, error) {
 	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/apps/%s/gameCenterDetail", appID)
 	rq, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
@@ -37,10 +32,10 @@ func (c *Client) GetGameCenter(ctx context.Context, appID string) (*GetGameCente
 		return nil, fmt.Errorf("unexpected status code %s: %d", url, resp.StatusCode)
 	}
 
-	rp := GetGameCenterResponse{}
+	rp := getResponse[GameCenter]{}
 	if err := json.NewDecoder(resp.Body).Decode(&rp); err != nil {
 		return nil, fmt.Errorf("failed to decode response %s: %w", url, err)
 	}
 
-	return &rp, nil
+	return &rp.Data, nil
 }

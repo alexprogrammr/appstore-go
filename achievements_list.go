@@ -7,17 +7,8 @@ import (
 	"net/http"
 )
 
-// https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievementsresponse
-type ListAchievementsResponse struct {
-	Data  []Achievement `json:"data"`
-	Links PagingLinks   `json:"links"`
-	Meta  struct {
-		Paging Paging `json:"paging"`
-	} `json:"meta"`
-}
-
 // https://developer.apple.com/documentation/appstoreconnectapi/list_all_achievements
-func (c *Client) ListAchievements(ctx context.Context, gameCenterID string) (*ListAchievementsResponse, error) {
+func (c *Client) ListAchievements(ctx context.Context, gameCenterID GameCenterID) ([]Achievement, error) {
 	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/gameCenterDetails/%s/gameCenterAchievements", gameCenterID)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
@@ -41,25 +32,16 @@ func (c *Client) ListAchievements(ctx context.Context, gameCenterID string) (*Li
 		return nil, fmt.Errorf("unexpected status code %s: %d", url, resp.StatusCode)
 	}
 
-	rp := ListAchievementsResponse{}
+	rp := listResponse[Achievement]{}
 	if err := json.NewDecoder(resp.Body).Decode(&rp); err != nil {
 		return nil, fmt.Errorf("failed to decode response %s: %w", url, err)
 	}
 
-	return &rp, nil
-}
-
-// https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievementlocalizationsresponse
-type ListAchievementLocalizationsResponse struct {
-	Data  []AchievementLocalization `json:"data"`
-	Links PagingLinks               `json:"links"`
-	Meta  struct {
-		Paging Paging `json:"paging"`
-	} `json:"meta"`
+	return rp.Data, nil
 }
 
 // https://developer.apple.com/documentation/appstoreconnectapi/list_all_localizations_for_an_achievement
-func (c *Client) ListAchievementLocalizations(ctx context.Context, achievementID string) (*ListAchievementLocalizationsResponse, error) {
+func (c *Client) ListAchievementLocalizations(ctx context.Context, achievementID AchievementID) ([]AchievementLocalization, error) {
 	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/gameCenterAchievements/%s/localizations", achievementID)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
@@ -83,10 +65,10 @@ func (c *Client) ListAchievementLocalizations(ctx context.Context, achievementID
 		return nil, fmt.Errorf("unexpected status code %s: %d", url, resp.StatusCode)
 	}
 
-	rp := ListAchievementLocalizationsResponse{}
+	rp := listResponse[AchievementLocalization]{}
 	if err := json.NewDecoder(resp.Body).Decode(&rp); err != nil {
 		return nil, fmt.Errorf("failed to decode response %s: %w", url, err)
 	}
 
-	return &rp, nil
+	return rp.Data, nil
 }

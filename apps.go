@@ -1,14 +1,15 @@
 package appstore
 
+type AppID string
+
 // https://developer.apple.com/documentation/appstoreconnectapi/app
 type App struct {
-	ID         string        `json:"id"`
-	Attributes AppAttributes `json:"attributes"`
-	// TODO: add more fields
+	ID   AppID   `json:"id"`
+	Attr AppAttr `json:"attributes"`
 }
 
 // https://developer.apple.com/documentation/appstoreconnectapi/app/attributes
-type AppAttributes struct {
+type AppAttr struct {
 	Name     string `json:"name"`
 	BundleID string `json:"bundleId"`
 	SKU      string `json:"sku"`
