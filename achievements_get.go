@@ -6,10 +6,10 @@ import (
 )
 
 // https://developer.apple.com/documentation/appstoreconnectapi/read_achievement_image_information
-func (c *Client) GetAchievementImage(ctx context.Context, id AchievementLocalizationID) (*AchievementImage, error) {
+func (c *Client) GetAchievementImage(ctx context.Context, id AchievementLocalizationID) (*Asset, error) {
 	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/gameCenterAchievementLocalizations/%s/gameCenterAchievementImage", id)
 
-	resp, err := doGet[getResponse[AchievementImage]](c, ctx, url)
+	resp, err := doGet[getResponse[Asset]](c, ctx, url)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get achievement image: %w", err)
 	}

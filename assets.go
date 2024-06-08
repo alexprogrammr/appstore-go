@@ -1,5 +1,7 @@
 package appstore
 
+import "fmt"
+
 type AssetState string
 
 const (
@@ -18,6 +20,18 @@ type AssetDeliveryState struct {
 	State    AssetState        `json:"state"`
 	Errors   []AssetStateError `json:"errors"`
 	Warnings []AssetStateError `json:"warnings"`
+}
+
+func (s AssetDeliveryState) IsComplete() bool {
+	return s.State == AssetStateComplete
+}
+
+func (s AssetDeliveryState) Error() error {
+	if s.State == AssetStateFailed {
+		return fmt.Errorf("asset failed: %v", s.Errors)
+	}
+
+	return nil
 }
 
 type ImageAsset struct {
@@ -39,10 +53,22 @@ type UploadOperation struct {
 	Headers []HttpHeader `json:"requestHeaders"`
 }
 
-type Asset struct {
+type AssetAttr struct {
 	Name       string             `json:"fileName"`
 	Size       int                `json:"fileSize"`
 	State      AssetDeliveryState `json:"assetDeliveryState"`
 	Image      ImageAsset         `json:"imageAsset"`
 	Operations []UploadOperation  `json:"uploadOperations"`
+}
+
+type Asset struct {
+	ID    string    `json:"id"`
+	Attr  AssetAttr `json:"attributes"`
+	Type  string    `json:"type"`
+	Links links     `json:"links"`
+}
+
+type CreateAssetAttr struct {
+	Name string `json:"fileName"`
+	Size int    `json:"fileSize"`
 }

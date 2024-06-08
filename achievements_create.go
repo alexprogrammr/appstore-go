@@ -30,3 +30,30 @@ func (c *Client) CreateAchievementLocalization(ctx context.Context, achievementI
 
 	return resp, nil
 }
+
+type CreateAchievementImageRequest struct {
+	Name string
+	Data []byte
+}
+
+// https://developer.apple.com/documentation/appstoreconnectapi/create_an_achievement_image
+func (c *Client) CreateAchievementImage(ctx context.Context, id AchievementLocalizationID, r *CreateAchievementImageRequest) (*Asset, error) {
+	url := "https://api.appstoreconnect.apple.com/v1/gameCenterAchievementImages"
+	attr := CreateAssetAttr{
+		Name: r.Name,
+		Size: len(r.Data),
+	}
+	req := newCreateRequest(attr, "gameCenterAchievementImages", relation{ID: string(id), Type: "gameCenterAchievementLocalizations"})
+
+	asset, err := doCreate[Asset](c, ctx, url, req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create achievement image: %w", err)
+	}
+
+	asset, err = c.uploadAsset(ctx, asset, r.Data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to upload achievement image: %w", err)
+	}
+
+	return asset, nil
+}

@@ -32,11 +32,3 @@ type AchievementLocalizationAttr struct {
 	BeforeEarnedDescription string `json:"beforeEarnedDescription"`
 	AfterEarnedDescription  string `json:"afterEarnedDescription"`
 }
-
-type AchievementImageID string
-
-// https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievementimage
-type AchievementImage struct {
-	ID   AchievementImageID `json:"id"`
-	Attr Asset              `json:"attributes"`
-}

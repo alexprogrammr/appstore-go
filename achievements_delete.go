@@ -28,7 +28,7 @@ func (c *Client) DeleteAchievementLocalization(ctx context.Context, id Achieveme
 }
 
 // https://developer.apple.com/documentation/appstoreconnectapi/delete_an_achievement_image
-func (c *Client) DeleteAchievementImage(ctx context.Context, id AchievementImageID) error {
+func (c *Client) DeleteAchievementImage(ctx context.Context, id string) error {
 	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/gameCenterAchievementImages/%s", id)
 
 	if err := doDelete(c, ctx, url); err != nil {
