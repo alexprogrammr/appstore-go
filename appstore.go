@@ -8,6 +8,19 @@ import (
 	"net/http"
 )
 
+type Resource[T any] struct {
+	ID    string `json:"id"`
+	Type  string `json:"type"`
+	Attr  T      `json:"attributes"`
+	Links Links  `json:"links"`
+}
+
+type Links struct {
+	Self  string `json:"self"`
+	Next  string `json:"next"`
+	First string `json:"first"`
+}
+
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
@@ -55,7 +68,7 @@ func doGet[T any](c *Client, ctx context.Context, url string) (*T, error) {
 	return rp, nil
 }
 
-func doCreate[T any](c *Client, ctx context.Context, url string, data any) (*T, error) {
+func doCreate[T any](c *Client, ctx context.Context, url string, data any) (*Resource[T], error) {
 	body, err := json.Marshal(data)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
@@ -84,7 +97,7 @@ func doCreate[T any](c *Client, ctx context.Context, url string, data any) (*T, 
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	rp := new(createResponse[T])
+	rp := new(createResponse[Resource[T]])
 	if err := json.NewDecoder(resp.Body).Decode(rp); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}

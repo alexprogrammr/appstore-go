@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-func (c *Client) uploadAsset(ctx context.Context, asset *Asset, data []byte) (*Asset, error) {
+func (c *Client) uploadAsset(ctx context.Context, asset *Resource[Asset], data []byte) (*Resource[Asset], error) {
 	wg := sync.WaitGroup{}
 	errs := make(chan error, len(asset.Attr.Operations))
 
@@ -39,12 +39,12 @@ func (c *Client) uploadAsset(ctx context.Context, asset *Asset, data []byte) (*A
 		return nil, fmt.Errorf("failed to commit asset: %w", err)
 	}
 
-	asset, err := doGet[Asset](c, ctx, asset.Links.Self)
+	resp, err := doGet[getResponse[Asset]](c, ctx, asset.Links.Self)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get asset: %w", err)
 	}
 
-	return asset, nil
+	return &resp.Data, nil
 }
 
 func (c *Client) uploadAssetChunk(ctx context.Context, op UploadOperation, data io.Reader) error {
@@ -81,7 +81,7 @@ type commitAssetRequest struct {
 	} `json:"data"`
 }
 
-func (c *Client) commitAsset(ctx context.Context, asset *Asset) error {
+func (c *Client) commitAsset(ctx context.Context, asset *Resource[Asset]) error {
 	commit := commitAssetRequest{}
 	commit.Data.ID = asset.ID
 	commit.Data.Type = asset.Type

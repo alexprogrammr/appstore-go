@@ -6,8 +6,8 @@ import (
 )
 
 // https://developer.apple.com/documentation/appstoreconnectapi/list_all_achievements
-func (c *Client) ListAchievements(ctx context.Context, gameCenterID GameCenterID) ([]Achievement, error) {
-	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/gameCenterDetails/%s/gameCenterAchievements", gameCenterID)
+func (c *Client) ListAchievements(ctx context.Context, gameCenter *Resource[GameCenter]) ([]Resource[Achievement], error) {
+	url := gameCenter.Links.Self + "/gameCenterAchievements"
 
 	resp, err := doGet[listResponse[Achievement]](c, ctx, url)
 	if err != nil {
@@ -18,8 +18,8 @@ func (c *Client) ListAchievements(ctx context.Context, gameCenterID GameCenterID
 }
 
 // https://developer.apple.com/documentation/appstoreconnectapi/list_all_localizations_for_an_achievement
-func (c *Client) ListAchievementLocalizations(ctx context.Context, achievementID AchievementID) ([]AchievementLocalization, error) {
-	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/gameCenterAchievements/%s/localizations", achievementID)
+func (c *Client) ListAchievementLocalizations(ctx context.Context, ach *Resource[Achievement]) ([]Resource[AchievementLocalization], error) {
+	url := ach.Links.Self + "/localizations"
 
 	resp, err := doGet[listResponse[AchievementLocalization]](c, ctx, url)
 	if err != nil {

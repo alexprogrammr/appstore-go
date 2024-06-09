@@ -6,7 +6,7 @@ import (
 )
 
 // https://developer.apple.com/documentation/appstoreconnectapi/list_apps
-func (c *Client) ListApps(ctx context.Context) ([]App, error) {
+func (c *Client) ListApps(ctx context.Context) ([]Resource[App], error) {
 	url := "https://api.appstoreconnect.apple.com/v1/apps"
 
 	resp, err := doGet[listResponse[App]](c, ctx, url)

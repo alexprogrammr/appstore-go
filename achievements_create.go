@@ -6,9 +6,9 @@ import (
 )
 
 // https://developer.apple.com/documentation/appstoreconnectapi/create_an_achievement
-func (c *Client) CreateAchievement(ctx context.Context, gameCenterID GameCenterID, attr *AchievementAttr) (*Achievement, error) {
+func (c *Client) CreateAchievement(ctx context.Context, gameCenter *Resource[GameCenter], ach *Achievement) (*Resource[Achievement], error) {
 	url := "https://api.appstoreconnect.apple.com/v1/gameCenterAchievements"
-	req := newCreateRequest(attr, "gameCenterAchievements", relation{ID: string(gameCenterID), Type: "gameCenterDetails"})
+	req := newCreateRequest(ach, "gameCenterAchievements", relation{ID: gameCenter.ID, Type: gameCenter.Type})
 
 	resp, err := doCreate[Achievement](c, ctx, url, req)
 	if err != nil {
@@ -19,9 +19,9 @@ func (c *Client) CreateAchievement(ctx context.Context, gameCenterID GameCenterI
 }
 
 // https://developer.apple.com/documentation/appstoreconnectapi/create_an_achievement_localization
-func (c *Client) CreateAchievementLocalization(ctx context.Context, achievementID AchievementID, attr *AchievementLocalizationAttr) (*AchievementLocalization, error) {
+func (c *Client) CreateAchievementLocalization(ctx context.Context, ach *Resource[Achievement], loc *AchievementLocalization) (*Resource[AchievementLocalization], error) {
 	url := "https://api.appstoreconnect.apple.com/v1/gameCenterAchievementLocalizations"
-	req := newCreateRequest(attr, "gameCenterAchievementLocalizations", relation{ID: string(achievementID), Type: "gameCenterAchievements"})
+	req := newCreateRequest(loc, "gameCenterAchievementLocalizations", relation{ID: ach.ID, Type: ach.Type})
 
 	resp, err := doCreate[AchievementLocalization](c, ctx, url, req)
 	if err != nil {
@@ -37,13 +37,13 @@ type CreateAchievementImageRequest struct {
 }
 
 // https://developer.apple.com/documentation/appstoreconnectapi/create_an_achievement_image
-func (c *Client) CreateAchievementImage(ctx context.Context, id AchievementLocalizationID, r *CreateAchievementImageRequest) (*Asset, error) {
+func (c *Client) CreateAchievementImage(ctx context.Context, loc *Resource[AchievementLocalization], r *CreateAchievementImageRequest) (*Resource[Asset], error) {
 	url := "https://api.appstoreconnect.apple.com/v1/gameCenterAchievementImages"
-	attr := CreateAssetAttr{
+	attr := CreateAsset{
 		Name: r.Name,
 		Size: len(r.Data),
 	}
-	req := newCreateRequest(attr, "gameCenterAchievementImages", relation{ID: string(id), Type: "gameCenterAchievementLocalizations"})
+	req := newCreateRequest(attr, "gameCenterAchievementImages", relation{ID: loc.ID, Type: loc.Type})
 
 	asset, err := doCreate[Asset](c, ctx, url, req)
 	if err != nil {

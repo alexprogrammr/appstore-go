@@ -53,7 +53,7 @@ type UploadOperation struct {
 	Headers []HttpHeader `json:"requestHeaders"`
 }
 
-type AssetAttr struct {
+type Asset struct {
 	Name       string             `json:"fileName"`
 	Size       int                `json:"fileSize"`
 	State      AssetDeliveryState `json:"assetDeliveryState"`
@@ -61,14 +61,7 @@ type AssetAttr struct {
 	Operations []UploadOperation  `json:"uploadOperations"`
 }
 
-type Asset struct {
-	ID    string    `json:"id"`
-	Attr  AssetAttr `json:"attributes"`
-	Type  string    `json:"type"`
-	Links links     `json:"links"`
-}
-
-type CreateAssetAttr struct {
+type CreateAsset struct {
 	Name string `json:"fileName"`
 	Size int    `json:"fileSize"`
 }

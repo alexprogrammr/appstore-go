@@ -6,8 +6,8 @@ import (
 )
 
 // https://developer.apple.com/documentation/appstoreconnectapi/read_the_state_of_game_center_for_an_app
-func (c *Client) GetGameCenter(ctx context.Context, appID AppID) (*GameCenter, error) {
-	url := fmt.Sprintf("https://api.appstoreconnect.apple.com/v1/apps/%s/gameCenterDetail", appID)
+func (c *Client) GetGameCenter(ctx context.Context, app *Resource[App]) (*Resource[GameCenter], error) {
+	url := app.Links.Self + "/gameCenterDetail"
 
 	resp, err := doGet[getResponse[GameCenter]](c, ctx, url)
 	if err != nil {

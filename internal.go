@@ -1,14 +1,14 @@
 package appstore
 
 type getResponse[T any] struct {
-	Data  T     `json:"data"`
-	Links links `json:"links"`
+	Data  Resource[T] `json:"data"`
+	Links Links       `json:"links"`
 }
 
 type listResponse[T any] struct {
-	Data  []T   `json:"data"`
-	Links links `json:"links"`
-	Meta  meta  `json:"meta"`
+	Data  []Resource[T] `json:"data"`
+	Links Links         `json:"links"`
+	Meta  meta          `json:"meta"`
 }
 
 type createRequest[T any] struct {
@@ -39,7 +39,7 @@ func newCreateRequest[T any](attr T, typ string, rel relation) createRequest[T] 
 
 type createResponse[T any] struct {
 	Data  T     `json:"data"`
-	Links links `json:"links"`
+	Links Links `json:"links"`
 }
 
 type meta struct {
@@ -49,10 +49,4 @@ type meta struct {
 type paging struct {
 	Total int `json:"total"`
 	Limit int `json:"limit"`
-}
-
-type links struct {
-	Self  string `json:"self"`
-	Next  string `json:"next"`
-	First string `json:"first"`
 }

@@ -1,15 +1,7 @@
 package appstore
 
-type AchievementID string
-
-// https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievement
-type Achievement struct {
-	ID   AchievementID   `json:"id"`
-	Attr AchievementAttr `json:"attributes"`
-}
-
 // https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievement/attributes
-type AchievementAttr struct {
+type Achievement struct {
 	ReferenceName    string `json:"referenceName"`
 	VendorIdentifier string `json:"vendorIdentifier"`
 	Points           int    `json:"points"`
@@ -17,16 +9,8 @@ type AchievementAttr struct {
 	ShowBeforeEarned bool   `json:"showBeforeEarned"`
 }
 
-type AchievementLocalizationID string
-
-// https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievementlocalization
-type AchievementLocalization struct {
-	ID   AchievementLocalizationID   `json:"id"`
-	Attr AchievementLocalizationAttr `json:"attributes"`
-}
-
 // https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievementlocalization/attributes
-type AchievementLocalizationAttr struct {
+type AchievementLocalization struct {
 	Locale                  string `json:"locale"`
 	Name                    string `json:"name"`
 	BeforeEarnedDescription string `json:"beforeEarnedDescription"`
