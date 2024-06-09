@@ -32,3 +32,18 @@ func NewClient(httpClient HTTPClient, tokenSource TokenSource) *Client {
 		tokenSource: tokenSource,
 	}
 }
+
+type response[T any] struct {
+	Data  T     `json:"data"`
+	Links Links `json:"links"`
+	Meta  meta  `json:"meta"`
+}
+
+type meta struct {
+	Paging paging `json:"paging"`
+}
+
+type paging struct {
+	Total int `json:"total"`
+	Limit int `json:"limit"`
+}

@@ -34,11 +34,6 @@ func newCreateRequest[T any](attr T, typ string, rel relation) createRequest[T] 
 	return r
 }
 
-type createResponse[T any] struct {
-	Data  Resource[T] `json:"data"`
-	Links Links       `json:"links"`
-}
-
 func doCreate[T any](c *Client, ctx context.Context, url string, data any) (*Resource[T], error) {
 	body, err := json.Marshal(data)
 	if err != nil {
@@ -68,7 +63,7 @@ func doCreate[T any](c *Client, ctx context.Context, url string, data any) (*Res
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	rp := new(createResponse[T])
+	rp := new(response[Resource[T]])
 	if err := json.NewDecoder(resp.Body).Decode(rp); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}

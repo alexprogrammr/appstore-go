@@ -7,11 +7,6 @@ import (
 	"net/http"
 )
 
-type getResponse[T any] struct {
-	Data  Resource[T] `json:"data"`
-	Links Links       `json:"links"`
-}
-
 func doGet[T any](c *Client, ctx context.Context, url string) (*Resource[T], error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
@@ -35,7 +30,7 @@ func doGet[T any](c *Client, ctx context.Context, url string) (*Resource[T], err
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	rp := new(getResponse[T])
+	rp := new(response[Resource[T]])
 	if err := json.NewDecoder(resp.Body).Decode(rp); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}
