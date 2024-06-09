@@ -20,7 +20,7 @@ func (c *Client) uploadAsset(ctx context.Context, asset *Resource[Asset], data [
 		go func(op UploadOperation) {
 			defer wg.Done()
 
-			buff := bytes.NewBuffer(data[op.Offset : op.Offset+op.Length])
+			buff := bytes.NewReader(data[op.Offset : op.Offset+op.Length])
 			err := c.uploadAssetChunk(ctx, op, buff)
 			if err != nil {
 				errs <- fmt.Errorf("failed to upload asset chunk: %w", err)
