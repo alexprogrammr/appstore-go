@@ -8,12 +8,28 @@ import (
 	"net/http"
 )
 
-type createRequest[T any] struct {
-	Data struct {
-		Type string `json:"type"`
-		Attr T      `json:"attributes"`
-		Rel  any    `json:"relationships"`
-	} `json:"data"`
+type resourceType string
+
+const (
+	resourceTypeAchievements             = "gameCenterAchievements"
+	resourceTypeAchievementLocalizations = "gameCenterAchievementLocalizations"
+	resourceTypeAchievementImages        = "gameCenterAchievementImages"
+)
+
+type createResource struct {
+	Type      resourceType `json:"type"`
+	Attr      any          `json:"attributes"`
+	Relations relations    `json:"relationships"`
+}
+
+type relations struct {
+	GameCenter              *relationd `json:"gameCenterDetail,omitempty"`
+	Achievement             *relationd `json:"gameCenterAchievement,omitempty"`
+	AchievementLocalization *relationd `json:"gameCenterAchievementLocalization,omitempty"`
+}
+
+type relationd struct {
+	Data relation `json:"data"`
 }
 
 type relation struct {
@@ -21,21 +37,10 @@ type relation struct {
 	Type string `json:"type"`
 }
 
-func newCreateRequest[T any](attr T, typ string, rel relation) createRequest[T] {
-	r := createRequest[T]{}
-	r.Data.Type = typ
-	r.Data.Attr = attr
-	r.Data.Rel = map[string]any{
-		rel.Type[:len(rel.Type)-1]: map[string]any{
-			"data": rel,
-		},
-	}
-
-	return r
-}
-
-func doCreate[T any](c *Client, ctx context.Context, url string, data any) (*Resource[T], error) {
-	body, err := json.Marshal(data)
+func doCreate[T any](c *Client, ctx context.Context, url string, resource createResource) (*Resource[T], error) {
+	body, err := json.Marshal(struct {
+		Data createResource `json:"data"`
+	}{resource})
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}

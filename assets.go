@@ -61,7 +61,7 @@ type Asset struct {
 	Operations []UploadOperation  `json:"uploadOperations"`
 }
 
-type CreateAsset struct {
+type createAsset struct {
 	Name string `json:"fileName"`
 	Size int    `json:"fileSize"`
 }
