@@ -39,12 +39,12 @@ func (c *Client) uploadAsset(ctx context.Context, asset *Resource[Asset], data [
 		return nil, fmt.Errorf("failed to commit asset: %w", err)
 	}
 
-	resp, err := doGet[getResponse[Asset]](c, ctx, asset.Links.Self)
+	resp, err := doGet[Asset](c, ctx, asset.Links.Self)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get asset: %w", err)
 	}
 
-	return &resp.Data, nil
+	return resp, nil
 }
 
 func (c *Client) uploadAssetChunk(ctx context.Context, op UploadOperation, data io.Reader) error {

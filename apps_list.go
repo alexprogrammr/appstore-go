@@ -9,10 +9,10 @@ import (
 func (c *Client) ListApps(ctx context.Context) ([]Resource[App], error) {
 	url := "https://api.appstoreconnect.apple.com/v1/apps"
 
-	resp, err := doGet[listResponse[App]](c, ctx, url)
+	resp, err := doList[App](c, ctx, url)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list apps: %w", err)
 	}
 
-	return resp.Data, nil
+	return resp, nil
 }

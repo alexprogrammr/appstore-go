@@ -9,10 +9,10 @@ import (
 func (c *Client) GetGameCenter(ctx context.Context, app *Resource[App]) (*Resource[GameCenter], error) {
 	url := app.Links.Self + "/gameCenterDetail"
 
-	resp, err := doGet[getResponse[GameCenter]](c, ctx, url)
+	resp, err := doGet[GameCenter](c, ctx, url)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get game center: %w", err)
 	}
 
-	return &resp.Data, nil
+	return resp, nil
 }
