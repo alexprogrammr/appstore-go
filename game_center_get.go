@@ -16,3 +16,14 @@ func (c *Client) GetGameCenter(ctx context.Context, app *Resource[App]) (*Resour
 
 	return resp, nil
 }
+
+func (c *Client) GetGameCenterByID(ctx context.Context, id string) (*Resource[GameCenter], error) {
+	url := "https://api.appstoreconnect.apple.com/v1/gameCenterDetails/" + id
+
+	resp, err := doGet[GameCenter](c, ctx, url)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get game center: %w", err)
+	}
+
+	return resp, nil
+}
