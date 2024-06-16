@@ -19,7 +19,7 @@ type AchievementUpdate struct {
 
 // https://developer.apple.com/documentation/appstoreconnectapi/gamecenterachievementlocalization/attributes
 type AchievementLocalization struct {
-	Locale                  string `json:"locale"`
+	Locale                  Locale `json:"locale"`
 	Name                    string `json:"name"`
 	BeforeEarnedDescription string `json:"beforeEarnedDescription"`
 	AfterEarnedDescription  string `json:"afterEarnedDescription"`
