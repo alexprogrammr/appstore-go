@@ -3,6 +3,8 @@ package appstore
 import (
 	"bytes"
 	"context"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -35,7 +37,7 @@ func (c *Client) uploadAsset(ctx context.Context, asset *Resource[Asset], data [
 		return nil, fmt.Errorf("failed to upload asset: %w", <-errs)
 	}
 
-	if err := c.commitAsset(ctx, asset); err != nil {
+	if err := c.commitAsset(ctx, asset, data); err != nil {
 		return nil, fmt.Errorf("failed to commit asset: %w", err)
 	}
 
@@ -81,11 +83,17 @@ type commitAssetRequest struct {
 	} `json:"data"`
 }
 
-func (c *Client) commitAsset(ctx context.Context, asset *Resource[Asset]) error {
+func (c *Client) commitAsset(ctx context.Context, asset *Resource[Asset], data []byte) error {
 	commit := commitAssetRequest{}
 	commit.Data.ID = asset.ID
 	commit.Data.Type = asset.Type
 	commit.Data.Attr.Uploaded = true
+
+	// achievements images do not require checksum
+	if asset.Type != resourceTypeAchievementImages {
+		checksum := md5.Sum(data)
+		commit.Data.Attr.Checksum = hex.EncodeToString(checksum[:])
+	}
 
 	body, err := json.Marshal(commit)
 	if err != nil {

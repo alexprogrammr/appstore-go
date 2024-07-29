@@ -11,6 +11,7 @@ import (
 type resourceType string
 
 const (
+	resourceTypeAppScreenshots           = "appScreenshots"
 	resourceTypeAchievements             = "gameCenterAchievements"
 	resourceTypeAchievementLocalizations = "gameCenterAchievementLocalizations"
 	resourceTypeAchievementImages        = "gameCenterAchievementImages"
@@ -26,6 +27,7 @@ type relations struct {
 	GameCenter              *relationd `json:"gameCenterDetail,omitempty"`
 	Achievement             *relationd `json:"gameCenterAchievement,omitempty"`
 	AchievementLocalization *relationd `json:"gameCenterAchievementLocalization,omitempty"`
+	AppScreenshotSet        *relationd `json:"appScreenshotSet,omitempty"`
 }
 
 type relationd struct {
