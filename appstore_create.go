@@ -12,6 +12,7 @@ type resourceType string
 
 const (
 	resourceTypeAppScreenshots           = "appScreenshots"
+	resourceTypeAppVersionLocalizations  = "appStoreVersionLocalizations"
 	resourceTypeAchievements             = "gameCenterAchievements"
 	resourceTypeAchievementLocalizations = "gameCenterAchievementLocalizations"
 	resourceTypeAchievementImages        = "gameCenterAchievementImages"

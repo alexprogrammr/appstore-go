@@ -9,3 +9,13 @@ type AppVersionLocalization struct {
 	MarketingURL string `json:"marketingUrl"`
 	SupportURL   string `json:"supportUrl"`
 }
+
+type AppVersionLocalizationUpdate struct {
+	ID           string `json:"-"`
+	WhatsNew     string `json:"whatsNew,omitempty"`
+	Description  string `json:"description,omitempty"`
+	Promotional  string `json:"promotionalText,omitempty"`
+	Keywords     string `json:"keywords,omitempty"`
+	MarketingURL string `json:"marketingUrl,omitempty"`
+	SupportURL   string `json:"supportUrl,omitempty"`
+}
