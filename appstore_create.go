@@ -13,6 +13,7 @@ type resourceType string
 const (
 	resourceTypeAppScreenshots           = "appScreenshots"
 	resourceTypeAppVersionLocalizations  = "appStoreVersionLocalizations"
+	resourceTypeAppEventLocalizations    = "appEventLocalizations"
 	resourceTypeAchievements             = "gameCenterAchievements"
 	resourceTypeAchievementLocalizations = "gameCenterAchievementLocalizations"
 	resourceTypeAchievementImages        = "gameCenterAchievementImages"
@@ -29,6 +30,7 @@ type relations struct {
 	Achievement             *relationd `json:"gameCenterAchievement,omitempty"`
 	AchievementLocalization *relationd `json:"gameCenterAchievementLocalization,omitempty"`
 	AppScreenshotSet        *relationd `json:"appScreenshotSet,omitempty"`
+	AppEvent                *relationd `json:"appEvent,omitempty"`
 }
 
 type relationd struct {
